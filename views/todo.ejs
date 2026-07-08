@@ -1,0 +1,54 @@
+<%- include("partials/header") %>
+
+    <div class="container">
+
+        <div class="title">
+            <img src="/images/logo.png" alt="Todo Logo" width="50">
+            <h1>Todo Details</h1>
+        </div>
+
+        <div class="todo-card">
+
+            <h2>📝 Description</h2>
+
+            <% if(todo.completed){ %>
+
+                <p class="todo-text completed">
+                    <del>
+                        <%= todo.description %>
+                    </del>
+                </p>
+
+                <% } else { %>
+
+                    <p class="todo-text">
+                        <%= todo.description %>
+                    </p>
+
+                    <% } %>
+
+                        <hr>
+
+                        <h2>📌 Status</h2>
+
+                        <p class="status">
+                            <%= todo.status %>
+                        </p>
+
+        </div>
+
+        <div class="detail-buttons">
+
+            <a href="/todos/<%= todo._id %>/edit">
+                <button class="edit-btn">✏ Edit</button>
+            </a>
+
+            <a href="/todos">
+                <button>← Back</button>
+            </a>
+
+        </div>
+
+    </div>
+
+    <%- include("partials/footer") %>

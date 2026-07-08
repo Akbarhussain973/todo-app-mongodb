@@ -1,0 +1,123 @@
+<%- include("partials/header") %>
+    <div class="container">
+
+        <div class="title">
+            <img src="/images/logo.png" alt="Todo Logo" width="50">
+            <h1>Todo App</h1>
+        </div>
+
+        <p class="subtitle">
+            Manage your daily tasks efficiently.
+        </p>
+        <div class="stats-card">
+            <h2>📊 Dashboard</h2>
+
+            <div class="stat-row">
+                <span>📋 Total Tasks</span>
+                <strong>
+                    <%= totalTodos %>
+                </strong>
+            </div>
+
+            <div class="stat-row">
+                <span>✅ Completed</span>
+                <strong>
+                    <%= completedTodos %>
+                </strong>
+            </div>
+
+            <div class="stat-row">
+                <span>⏳ Pending</span>
+                <strong>
+                    <%= pendingTodos %>
+                </strong>
+            </div>
+        </div>
+
+        <h3>Add New Task</h3>
+        <form id="addTodo" action="/todos" method="POST">
+            <input type="text" name="todo" placeholder="What needs to be done?" required autofocus>
+            <button>Add Todo</button>
+        </form>
+
+
+        <% if (todos.length===0) { %>
+
+            <div class="empty-state">
+                <h2>📭</h2>
+                <p>No todos yet.</p>
+                <small>Add your first task!</small>
+            </div>
+
+            <% } else { %>
+                <ul>
+
+                    <% for (let todo of todos) { %>
+
+                        <li>
+
+                            <span>
+                                <% if (todo.completed) { %>
+                                    ✅ <del>
+                                        <%= todo.description %>
+                                    </del>
+                                    <% } else { %>
+                                        📝 <%= todo.description %>
+                                            <% } %>
+                            </span>
+
+                            <div>
+
+                                <a href="/todos/<%= todo.id %>">
+                                    <button class="view-btn">👁 View</button>
+                                </a>
+
+                                <a href="/todos/<%= todo.id %>/edit">
+                                    <button class="edit-btn">✏ Edit</button>
+                                </a>
+
+                                <form class="delete-form" action="/todos/<%= todo.id %>?_method=DELETE" method="POST"
+                                    style="display:inline;">
+                                    <button class="delete-btn">🗑 Delete</button>
+                                </form>
+                                <%if (!todo.completed) { %>
+                                    <form action="/todos/<%= todo.id %>/complete?_method=PATCH" method="POST"
+                                        style="display:inline;">
+
+                                        <button class="complete-btn">
+                                            ✅Mark Complete
+                                        </button>
+
+                                    </form>
+                                    <% } else {%>
+                                        <form action="/todos/<%= todo.id %>/pending?_method=PATCH" method="POST"
+                                            style="display:inline;">
+
+                                            <button class="pending-btn">
+                                                ↩ Undo Complete
+                                            </button>
+
+                                        </form>
+                                        <% } %>
+
+
+
+
+
+
+
+
+                            </div>
+
+                        </li>
+
+                        <% } %>
+
+                </ul>
+                <% } %>
+
+
+
+    </div>
+
+    <%- include("partials/footer") %>

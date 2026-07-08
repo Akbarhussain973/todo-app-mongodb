@@ -1,0 +1,45 @@
+<%- include("partials/header") %>
+
+    <div class="container">
+
+        <div class="title">
+            <img src="/images/logo.png" alt="Todo Logo" width="50">
+            <h1>Edit Todo</h1>
+        </div>
+
+        <p class="subtitle">
+            Update your task below.
+        </p>
+
+        <div class="todo-card">
+
+            <form method="POST" action="/todos/<%= todo._id %>?_method=PATCH">
+
+                <label for="description">
+                    📝 Description
+                </label>
+
+                <input id="description" type="text" name="description" value="<%= todo.description %>" required
+                    autofocus>
+
+                <div class="edit-actions">
+
+                    <button type="submit" class="edit-btn">
+                        💾 Save Changes
+                    </button>
+
+                    <a href="/todos">
+                        <button type="button">
+                            ← Cancel
+                        </button>
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <%- include("partials/footer") %>
