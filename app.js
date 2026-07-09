@@ -6,6 +6,7 @@ const methodOverride = require("method-override");
 const todoRoutes = require("./routes/todo");
 const Todo = require("./models/Todo");
 const mongoose = require("mongoose");
+const todoController = require("./controllers/todoController");
 
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -28,10 +29,7 @@ app.get("/about", (req, res) => {
   });
 });
 
-app.get("/", async (req, res) => {
-  const todos = await Todo.find();
-  res.render("index", { todos, title: "Todos", totalTodos: todos.length });
-});
+app.get("/", todoController.index);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
