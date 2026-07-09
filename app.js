@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -5,12 +6,14 @@ const methodOverride = require("method-override");
 const todoRoutes = require("./routes/todo");
 const Todo = require("./models/Todo");
 const mongoose = require("mongoose");
-require("dotenv").config();
 
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+  .catch((err) => {
+    console.error(err);
+    console.error(err.stack);
+  });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
