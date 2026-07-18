@@ -7,9 +7,22 @@
 ![EJS](https://img.shields.io/badge/EJS-Template-yellow)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
-A full-stack **Todo Management Application** built using **Node.js, Express.js, MongoDB Atlas, Mongoose, and EJS** following the **MVC (Model–View–Controller)** architecture.
+A production-style full-stack Todo Management Application built with Node.js, Express.js, MongoDB Atlas, Mongoose, Passport.js, and EJS. The project follows the MVC (Model–View–Controller) architecture and demonstrates secure user authentication, session management, server-side validation, responsive UI design, and clean backend organization.
 
-The application allows users to efficiently manage daily tasks by creating, updating, completing, viewing, and deleting todos while storing data securely in **MongoDB Atlas**.
+# ⭐ Highlights
+
+- Secure authentication using Passport.js
+- Password hashing with Passport Local Mongoose
+- Session-based authorization
+- Joi request validation
+- Protected routes using custom middleware
+- Centralized error handling & custom error pages
+- Clean MVC architecture
+- Cloud-hosted MongoDB Atlas database
+- Secure sessions using Express Session
+- Environment variable management with Dotenv
+- Fully responsive interface
+- Deployed on Render
 
 ---
 
@@ -27,46 +40,91 @@ https://todo-app-yzk2.onrender.com
 
 ---
 
+## 🎯 Project Overview
+
+This project was built to strengthen my backend engineering skills by implementing authentication, authorization, MVC architecture, server-side validation, session management, and MongoDB integration in a production-style Express application.
+
+## 🏛 Architecture
+
+The application follows the MVC (Model–View–Controller) architecture to keep business logic, routing, database models, and views cleanly separated.
+
+- **Models** – Mongoose schemas and business logic
+- **Views** – EJS templates and reusable partials
+- **Controllers** – Application logic
+- **Routes** – Express routing layer
+- **Middleware** – Authentication, validation, and authorization
+- **Utilities** – Custom error handling and async wrappers
+
 # 📸 Screenshots
 
-## 🏠 Home Page
-
+## 🏠 Home
 ![Home](screenshots/home.png)
 
----
+## 👤 Register
+![Register](screenshots/register.png)
+
+## 🔑 Login
+![Login](screenshots/login.png)
+
+## 📊 Dashboard
+![Dashboard](screenshots/dashboard.png)
 
 ## 👀 View Todo
-
 ![View](screenshots/view.png)
 
----
-
-## ✏️ Edit Todo
-
+## ✏ Edit Todo
 ![Edit](screenshots/edit.png)
 
+## 🗑 Delete Todo
+![Delete](screenshots/delete.png)
+
+## ℹ About Page
+![About](screenshots/about.png)
+
 ---
 
-# ✨ Features
+## ✨ Features
 
-- ➕ Create Todo
-- 👀 View Todo Details
-- ✏️ Edit Existing Todo
-- 🗑 Delete Todo
-- ✅ Mark Todo as Completed
-- ↩️ Mark Completed Todo as Pending
-- 📊 Dashboard Statistics
-  - Total Todos
-  - Completed Todos
-  - Pending Todos
-- ☁️ MongoDB Atlas Cloud Database
-- 🏗 MVC Architecture
-- 🔄 Mongoose Middleware
-- 🪄 Mongoose Virtual Properties
-- ⚙️ Mongoose Instance Methods
-- 📚 Mongoose Static Methods
-- 🚀 Live Deployment on Render
+### Authentication
+- User Registration
+- User Login & Logout
+- Secure Password Hashing (Passport Local Mongoose)
+- Session-based Authentication
+- Protected Routes with Authentication & Authorization Middleware
 
+### Todo Management
+- Create Todos
+- View Todo Details
+- Edit Todos
+- Delete Todos
+- Search Todos
+- Mark Complete / Pending
+
+### Dashboard
+- Total Todos
+- Completed Todos
+- Pending Todos
+
+### User Experience
+- Flash Success & Error Messages
+- Responsive Design
+- Custom 404 Error Page
+- Clean Navigation
+
+### Backend
+- MVC Architecture
+- Joi Validation
+- Custom Error Handling
+- Async Error Wrapper
+- Mongoose Middleware
+- Instance Methods
+- Static Methods
+- Virtual Properties
+
+### Deployment
+- MongoDB Atlas
+- Render Deployment
+ 
 ---
 
 # 🛠 Tech Stack
@@ -75,10 +133,12 @@ https://todo-app-yzk2.onrender.com
 |----------|--------------|
 | **Backend** | Node.js, Express.js |
 | **Database** | MongoDB Atlas, Mongoose |
-| **Frontend** | EJS, HTML5, CSS3 |
+| **Frontend** | EJS, HTML5, CSS3, Vanilla JavaScript |
+| **Authentication** | Passport.js, Express Session |
+| **Validation** | Joi |
 | **Deployment** | Render |
 | **Version Control** | Git, GitHub |
-| **Utilities** | Dotenv, Method Override |
+| **Utilities** | Dotenv, Method Override, Connect Flash |
 
 ---
 
@@ -86,42 +146,59 @@ https://todo-app-yzk2.onrender.com
 
 ```text
 todo-app-mongodb/
-│
 ├── controllers/
-│   └── todoController.js
-│
+│   ├── todoController.js
+│   └── userController.js
+├── middleware/
+│   ├── isLoggedIn.js
+│   ├── validateEditTodo.js
+│   ├── validateLogin.js
+│   ├── validateRegister.js
+│   └── validateTodo.js
 ├── models/
-│   └── Todo.js
-│
+│   ├── Todo.js
+│   └── User.js
 ├── public/
 │   ├── css/
+│   │   └── style.css
 │   ├── images/
+│   │   └── logo.png
 │   └── js/
-│
+│       └── script.js
 ├── routes/
-│   └── todo.js
-│
+│   ├── todo.js
+│   └── user.js
 ├── screenshots/
-│   ├── home.png
+│   ├── about.png
+│   ├── dashboard.png
+│   ├── delete.png
 │   ├── edit.png
+│   ├── home.png
+│   ├── login.png
+│   ├── register.png
 │   └── view.png
-│
+├── utils/
+│   ├── catchAsync.js
+│   └── ExpressError.js
 ├── views/
 │   ├── partials/
-│   │   ├── header.ejs
-│   │   └── footer.ejs
-│   │
+│   │   ├── flash.ejs
+│   │   ├── footer.ejs
+│   │   └── header.ejs
+│   ├── users/
+│   │   ├── login.ejs
+│   │   └── register.ejs
 │   ├── about.ejs
 │   ├── edit.ejs
+│   ├── error.ejs
 │   ├── index.ejs
 │   └── todo.ejs
-│
-├── .env.example
-├── .gitignore
 ├── app.js
 ├── package.json
 ├── package-lock.json
-└── README.md
+├── schemas.js
+├── README.md
+└── .gitignore
 ```
 
 ---
@@ -160,6 +237,7 @@ Add the following environment variable:
 
 ```env
 MONGODB_URI=your_mongodb_connection_string
+SESSION_SECRET=your_secret_key
 ```
 
 > **Note:** Never commit your `.env` file to GitHub. It contains sensitive credentials and should remain private.
@@ -180,48 +258,46 @@ http://localhost:3000
 
 ---
 
-# 📚 What I Learned
+## 📚 What I Learned
 
-Developing this project helped me gain practical experience with:
+This project strengthened my understanding of:
 
-- MVC (Model–View–Controller) Architecture
-- Express Routing
-- CRUD Operations
-- MongoDB Atlas Integration
-- Mongoose Models & Schema Design
-- Mongoose Instance Methods
-- Mongoose Static Methods
-- Mongoose Virtual Properties
-- Mongoose Middleware (Pre & Post Hooks)
-- Environment Variables using Dotenv
+- Designing applications using MVC Architecture
+- Building RESTful Express applications
+- Implementing Authentication with Passport.js
+- Session-based User Authentication
+- Password Hashing using Passport Local Mongoose
+- Route Protection using Middleware
+- Server-side Validation using Joi
+- CRUD Operations with MongoDB and Mongoose
+- Mongoose Schema Design
+- Instance Methods
+- Static Methods
+- Virtual Properties
+- Middleware (Pre/Post Hooks)
+- Session Management
+- Authentication & Authorization
+- Centralized Error Handling
+- Async Error Handling Patterns
+- Flash Messaging
+- Responsive UI Development
+- Deployment using MongoDB Atlas & Render
 - Git & GitHub Workflow
-- Cloud Database Integration
-- Deploying Node.js Applications on Render
-- Debugging Real-world Deployment & Database Connectivity Issues
 
----
+## 🔮 Future Improvements
 
-# 🔮 Future Improvements
-
-- 🔐 User Authentication
-- 👤 Multiple Users
-- 🏷 Categories & Tags
-- 📅 Due Dates
-- 🔍 Search & Filtering
-- 🌙 Dark Mode
-- 📱 Fully Responsive UI
-- 🌐 REST API
-- ⚛ React Frontend
-- 🤖 AI-powered Task Suggestions
-
----
-
-# 💻 Local Development
-
-```bash
-npm install
-node app.js
-```
+- Due Dates
+- Categories & Tags
+- Priority Levels
+- Advanced Filtering & Sorting
+- Password Reset
+- Email Verification
+- User Profile
+- Dark Mode
+- REST API
+- React Frontend
+- Progressive Web App
+- AI-powered Task Suggestions
 
 ---
 
