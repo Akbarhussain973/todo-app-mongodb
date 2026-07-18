@@ -34,11 +34,17 @@
             </div>
         </div>
 
+        <h3>Search Tasks</h3>
+
+        <input id="search" type="text" placeholder="🔍 Search tasks...">
+
         <h3>Add New Task</h3>
         <form id="addTodo" action="/todos" method="POST">
             <input type="text" name="todo" placeholder="What needs to be done?" required autofocus>
             <button>Add Todo</button>
         </form>
+
+
 
 
         <% if (todos.length===0) { %>
@@ -54,9 +60,9 @@
 
                     <% for (let todo of todos) { %>
 
-                        <li>
+                        <li class="todo-item">
 
-                            <span>
+                            <span class="todo-text">
                                 <% if (todo.completed) { %>
                                     ✅ <del>
                                         <%= todo.description %>
@@ -99,6 +105,8 @@
 
                                         </form>
                                         <% } %>
+
+
 
 
 

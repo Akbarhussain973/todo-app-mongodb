@@ -19,10 +19,29 @@
             📝 Todo App
         </div>
 
-        <div class="nav-links">
-            <a href="/todos">Home</a>
-            <a href="/todos/#addTodo">Add Todo</a>
-            <a href="/about">About</a>
-        </div>
+        <% if(currentUser) { %>
+            <div class="user-info">
+                <strong>
+                    👋 Welcome, <%= currentUser.email %>
+                </strong>
+            </div>
 
+            <div class="nav-links">
+
+                <a href="/todos">Home</a>
+                <a href="/todos/#addTodo">Add Todo</a>
+                <a href="/about">About </a>
+                <form action="/logout" method="POST">
+                    <button class="logout-btn" type="submit">Logout</button>
+                </form>
+            </div>
+            <% } else { %>
+                <div class="nav-links">
+                    <a href="/about">About</a>
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                </div>
+                <% } %>
     </nav>
+
+    <%- include("flash") %>

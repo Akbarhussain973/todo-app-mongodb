@@ -1,29 +1,34 @@
 const Todo = require("../models/Todo");
+const ExpressError = require("../utils/ExpressError");
 
 exports.index = async (req, res) => {
-  const todos = await Todo.find();
-  const total = await Todo.totalCount();
-  const completed = await Todo.completedCount();
-  const pending = total - completed;
+  const todos = await Todo.find({
+    owner: req.user._id,
+  });
+  const totalTodos = await Todo.totalCount(req.user._id);
+  const completedTodos = await Todo.completedCount(req.user._id);
+  const pendingTodos = totalTodos - completedTodos;
   res.render("index", {
     todos,
     title: "Todos",
-    totalTodos: todos.length,
-    completedTodos: completed,
-    pendingTodos: pending,
+    totalTodos,
+    completedTodos,
+    pendingTodos,
   });
 };
 
 exports.show = async (req, res) => {
-  const todoId = req.params.id;
-  const todo = await Todo.findById(todoId);
+  const todo = await Todo.findOne({
+    _id: req.params.id,
+    owner: req.user._id,
+  });
 
   if (!todo) {
-    return res.status(404).send("Todo not found");
+    throw new ExpressError("Todo not found", 404);
   }
 
-  const totalTodos = await Todo.totalCount();
-  const completedTodos = await Todo.completedCount();
+  const totalTodos = await Todo.totalCount(req.user._id);
+  const completedTodos = await Todo.completedCount(req.user._id);
   const pendingTodos = totalTodos - completedTodos;
 
   res.render("todo", {
@@ -36,15 +41,17 @@ exports.show = async (req, res) => {
 };
 
 exports.editForm = async (req, res) => {
-  const todoId = req.params.id;
-  const todo = await Todo.findById(todoId);
+  const todo = await Todo.findOne({
+    _id: req.params.id,
+    owner: req.user._id,
+  });
 
   if (!todo) {
-    return res.status(404).send("Todo not found");
+    throw new ExpressError("Todo not found", 404);
   }
 
-  const totalTodos = await Todo.totalCount();
-  const completedTodos = await Todo.completedCount();
+  const totalTodos = await Todo.totalCount(req.user._id);
+  const completedTodos = await Todo.completedCount(req.user._id);
   const pendingTodos = totalTodos - completedTodos;
 
   res.render("edit", {
@@ -57,36 +64,40 @@ exports.editForm = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  const newTodo = req.body.todo;
-
-  if (newTodo && newTodo.trim() !== "") {
-    await Todo.create({
-      description: newTodo.trim(),
-    });
-  }
+  await Todo.create({
+    description: req.body.todo.trim(),
+    owner: req.user._id,
+  });
 
   res.redirect("/todos");
 };
 
 exports.update = async (req, res) => {
-  const todoId = req.params.id;
-
-  const updatedTodo = await Todo.findByIdAndUpdate(todoId, {
-    description: req.body.description,
-  });
+  const updatedTodo = await Todo.findOneAndUpdate(
+    {
+      _id: req.params.id,
+      owner: req.user._id,
+    },
+    {
+      description: req.body.description,
+    },
+  );
 
   if (!updatedTodo) {
-    return res.status(404).send("Todo not found");
+    throw new ExpressError("Todo not found", 404);
   }
 
   res.redirect("/todos");
 };
 
 exports.markCompleted = async (req, res) => {
-  const todo = await Todo.findById(req.params.id);
+  const todo = await Todo.findOne({
+    _id: req.params.id,
+    owner: req.user._id,
+  });
 
   if (!todo) {
-    return res.status(404).send("Todo not found");
+    throw new ExpressError("Todo not found", 404);
   }
 
   await todo.markCompleted();
@@ -95,10 +106,13 @@ exports.markCompleted = async (req, res) => {
 };
 
 exports.markPending = async (req, res) => {
-  const todo = await Todo.findById(req.params.id);
+  const todo = await Todo.findOne({
+    _id: req.params.id,
+    owner: req.user._id,
+  });
 
   if (!todo) {
-    return res.status(404).send("Todo not found");
+    throw new ExpressError("Todo not found", 404);
   }
 
   await todo.markPending();
@@ -107,9 +121,14 @@ exports.markPending = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  const todoId = req.params.id;
+  const deletedTodo = await Todo.findOneAndDelete({
+    _id: req.params.id,
+    owner: req.user._id,
+  });
 
-  await Todo.findByIdAndDelete(todoId);
+  if (!deletedTodo) {
+    throw new ExpressError("Todo not found", 404);
+  }
 
   res.redirect("/todos");
 };

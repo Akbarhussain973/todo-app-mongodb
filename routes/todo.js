@@ -1,16 +1,28 @@
 const express = require("express");
 const router = express.Router();
-
-const Todo = require("../models/Todo");
 const todoController = require("../controllers/todoController");
 
-router.get("/", todoController.index);
-router.get("/:id", todoController.show);
-router.get("/:id/edit", todoController.editForm);
-router.post("/", todoController.create);
-router.patch("/:id", todoController.update);
-router.patch("/:id/complete", todoController.markCompleted);
-router.patch("/:id/pending", todoController.markPending);
-router.delete("/:id", todoController.delete);
+const isLoggedIn = require("../middleware/isLoggedIn");
+const validateTodo = require("../middleware/validateTodo");
+const validateEditTodo = require("../middleware/validateEditTodo");
+const catchAsync = require("../utils/catchAsync");
+
+router.use(isLoggedIn);
+
+router.get("/", catchAsync(todoController.index));
+
+router.get("/:id", catchAsync(todoController.show));
+
+router.get("/:id/edit", catchAsync(todoController.editForm));
+
+router.post("/", validateTodo, catchAsync(todoController.create));
+
+router.patch("/:id", validateEditTodo, catchAsync(todoController.update));
+
+router.patch("/:id/complete", catchAsync(todoController.markCompleted));
+
+router.patch("/:id/pending", catchAsync(todoController.markPending));
+
+router.delete("/:id", catchAsync(todoController.delete));
 
 module.exports = router;

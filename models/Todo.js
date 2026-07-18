@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const todoSchema = new mongoose.Schema({
   description: {
     type: String,
@@ -9,6 +8,10 @@ const todoSchema = new mongoose.Schema({
   completed: {
     type: Boolean,
     default: false,
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
 });
 
@@ -22,19 +25,16 @@ todoSchema.methods.markPending = async function () {
   await this.save();
 };
 
-todoSchema.statics.completedCount = function () {
+todoSchema.statics.completedCount = function (userId) {
   return this.countDocuments({
+    owner: userId,
     completed: true,
   });
 };
 
-todoSchema.statics.totalCount = function () {
-  return this.countDocuments();
-};
-
-todoSchema.statics.pendingCount = function () {
+todoSchema.statics.totalCount = function (userId) {
   return this.countDocuments({
-    completed: false,
+    owner: userId,
   });
 };
 
