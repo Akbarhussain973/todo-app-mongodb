@@ -4,15 +4,19 @@ exports.renderRegisterForm = (req, res) => {
   res.render("users/register", { title: "Register" });
 };
 
-exports.registerUser = async (req, res) => {
+exports.registerUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = new User({ email });
 
-  await User.register(user, password);
-  req.flash("success", "Welcome to Todo App!");
+  const registeredUser = await User.register(user, password);
 
-  res.redirect("/todos");
+  req.login(registeredUser, (err) => {
+    if (err) return next(err);
+
+    req.flash("success", "Welcome to Todo App!");
+    res.redirect("/todos");
+  });
 };
 
 exports.renderLoginForm = (req, res) => {
